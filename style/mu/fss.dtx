@@ -13,6 +13,7 @@
 % this style is just a skeleton, which is unlikely to satisfy the
 % exact requirements of any department and will require
 % modification by the individual departments.
+% This is a modification by Jakub Vašíček for the fall semester 2020.
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{fithesis/style/mu/fithesis-fss}[2016/04/18]
@@ -24,8 +25,8 @@
 \thesis@color@setup{
   links={HTML}{58EDD7},
   tableEmph={HTML}{69D6C6},
-  tableOdd={HTML}{E3F1EE},
-  tableEven={HTML}{C5E3DF}}
+  tableOdd={HTML}{FFFFFF},
+  tableEven={HTML}{FFFFFF}}
 %    \end{macrocode}
 % The bibliography support is enabled. The |authoryear| citations
 % are used and the bibliography is sorted by name, title, and year.
@@ -46,6 +47,230 @@
   \pagenumbering{roman}}
 %    \end{macrocode}
 % \end{macro}
+
+% ************* COVER PAGE *******************
+
+%\begin{macro}{\thesis@blocks@cover}
+% The |\thesis@blocks@cover| macro typesets the thesis
+% cover. It is composed of three macros:
+% \begin{itemize}
+%   \item\DescribeMacro{\thesis@blocks@cover@header}^^A
+%        |\thesis@blocks@cover@header| -- The header of the cover
+%        page
+%   \item\DescribeMacro{\thesis@blocks@cover@content}^^A
+%        |\thesis@blocks@cover@content| -- The content of the cover
+%        page
+%   \item\DescribeMacro{\thesis@blocks@cover@footer}^^A
+%        |\thesis@blocks@cover@footer| -- The footer of the cover
+%        page
+% \end{itemize}
+% This allows the subsequently loaded style files to only redefine
+% certain parts of the cover page.
+% \begin{macrocode}
+\def\thesis@blocks@cover{%
+  \ifthesis@cover@
+    \thesis@blocks@clear
+    \begin{alwayssingle}%
+      \thispagestyle{empty}%
+      \begin{center}%
+        \thesis@blocks@cover@header
+        \thesis@blocks@facultyLogo@color\\[0.4in]%
+        \let\footnotesize\small
+        \let\footnoterule\relax{}%
+        \thesis@blocks@cover@content
+        \par\vspace{40pt}
+        \thesis@blocks@cover@footer
+      \end{center}%
+    \end{alwayssingle}%
+  \fi}
+%    \end{macrocode}
+% The output of the |\thesis@blocks@cover@header| macro is
+% controlled by the following conditionals:
+% \begin{enumerate}
+%   \item|\ifthesis@blocks@cover@university@| -- This
+%        conditional expression determines, whether the university
+%        name is going to be included in the header of the cover.
+%        The default value of this conditional is \texttt{true}.
+%   \item|\ifthesis@blocks@cover@faculty@| -- This
+%        conditional expression determines, whether the faculty
+%        name is going to be included in the header of the cover.
+%        The default value of this conditional is \texttt{true}.
+%   \item|\ifthesis@blocks@cover@department@| -- This
+%        conditional expression determines, whether the department
+%        name is going to be included in the header of the cover.
+%        The default value of this conditional is \texttt{false}.
+%   \item|\ifthesis@blocks@cover@field@| -- This
+%        conditional expression determines, whether the field of
+%        study is going to be included in the header of the cover.
+%        The default value of this conditional is \texttt{false}.
+% \end{enumerate}
+% The sebsequently loaded style files can modify the value of these
+% conditionals to alter the output of the
+% |\thesis@blocks@cover@header| macro without altering its
+% definition.
+% \begin{macrocode}
+\newif\ifthesis@blocks@cover@university@
+\thesis@blocks@cover@university@true
+\newif\ifthesis@blocks@cover@faculty@
+\thesis@blocks@cover@faculty@true
+\newif\ifthesis@blocks@cover@department@
+\thesis@blocks@cover@department@false
+\newif\ifthesis@blocks@cover@field@
+\thesis@blocks@cover@field@false
+
+\def\thesis@blocks@cover@header{%
+  {\sc\ifthesis@blocks@cover@university@
+        \thesis@titlePage@LARGE\thesis@@{universityName}\\%
+   \fi\ifthesis@blocks@cover@faculty@
+        \thesis@titlePage@Large\thesis@@{facultyName}\\%
+   \fi\ifthesis@blocks@cover@department@
+        \thesis@titlePage@large\thesis@department@name\\%
+      \fi}
+  \ifthesis@blocks@cover@field@
+    {\thesis@titlePage@large\vskip 1em%
+      {\bf\thesis@@{fieldTitle}:} \thesis@field@name}%
+  \fi\vskip 2em}
+\def\thesis@blocks@cover@content{%
+  {\thesis@titlePage@Huge\bf\thesis@TeXtitle\par\vfil}%
+  \vspace{20pt}%
+  {\thesis@titlePage@large\sc\thesis@@{typeName}}\\[0.3in]%
+  {\thesis@titlePage@Large\bf\thesis@author}}
+\def\thesis@blocks@cover@footer{%
+  \vspace{40pt}%
+  {Supervisor: \thesis@advisor}\\%
+  \vspace{20pt}%
+  {\thesis@departmentEn}\\%
+  \vspace{5pt}%
+  {\thesis@programmeEn}\\%
+  \vspace{15pt}%
+  {\thesis@titlePage@large\thesis@place, \thesis@year}}
+%    \end{macrocode}
+% \end{macro}
+
+% ************* BIBLIOGRAPHIC RECORD CZ *******************
+
+% \begin{macro}{\thesis@blocks@bibrecordCz}
+% The |\thesis@blocks@bibrecordCz| macro typesets the 
+% bibliographic record in Czech.
+% \begin{macrocode}
+\def\thesis@blocks@bibrecordCz{%
+  \thesis@blocks@clear
+  \begin{alwayssingle}%
+    {\let\thesis@blocks@clear\relax
+    \chapter*{\thesis@english@bibrecordTitleCz}}%
+    \renewcommand{\arraystretch}{1.5}
+
+    \begin{tabular}{ p{4cm} p{9cm} }
+      Autor & 
+        \renewcommand{\arraystretch}{1}
+        \begin{tabular}{@{}l@{}}{\thesis@author} \\ Fakulta sociálních studií \\ Masarykova univerzita \\ {\thesis@department} \end{tabular}
+       \\
+      Název práce & {\thesis@title} \\
+      Studijní program & {\thesis@programme} \\
+      Studijní obor & {\thesis@programmeEn} \\
+      Vedoucí práce & {\thesis@advisor} \\
+      Rok & {\thesis@year} \\
+      Počet stran & {\thesis@pages} \\
+      Klíčová slova & {\thesis@keywords} \\
+    \end{tabular}
+
+    \par\vfil\null
+  \end{alwayssingle}}
+% \end{macrocode}
+% \end{macro}
+
+% ************* BIBLIOGRAPHIC RECORD EN *******************
+
+% \begin{macro}{\thesis@blocks@bibrecord}
+% The |\thesis@blocks@bibrecord| macro typesets the 
+% bibliographic record in English.
+% \begin{macrocode}
+\def\thesis@blocks@bibrecord{%
+  \begin{alwayssingle}%
+    % Start the new chapter without clearing the left page.
+    \clearpage
+    {\let\thesis@blocks@clear\relax
+    \chapter*{\thesis@english@bibrecordTitle}}%
+    \renewcommand{\arraystretch}{1.5}
+
+    \begin{tabular}{ p{4cm} p{9cm} }
+      Author & 
+        \renewcommand{\arraystretch}{1}
+        \begin{tabular}{@{}l@{}}{\thesis@author} \\ Faculty of Social Studies \\ Masaryk University \\ {\thesis@departmentEn} \end{tabular}
+       \\
+      Title of Thesis & {\thesis@title} \\
+      Degree Programme & {\thesis@programmeEn} \\
+      Field of Study & {\thesis@programmeEn} \\
+      Supervisor & {\thesis@advisor} \\
+      Year & {\thesis@year} \\
+      Number of Pages & {\thesis@pages} \\
+      Keywords & {\thesis@keywordsEn} \\
+    \end{tabular}
+
+    \par\vfil\null
+  \end{alwayssingle}}
+% \end{macrocode}
+% \end{macro}
+
+% ************* ABSTRACT CZ *******************
+
+% \begin{macro}{\thesis@blocks@abstractCz}
+% The |\thesis@blocks@abstractCz| macro typesets the Czech
+% abstract (only if the locale is English).
+% \begin{macrocode}
+\def\thesis@blocks@abstractCz{%
+  \ifthesis@english
+    \begin{alwayssingle}%
+      % Start the new chapter without clearing the left page.
+      \clearpage
+      {\let\thesis@blocks@clear\relax
+      \chapter*{\thesis@english@abstractTitleCz}}%
+      \noindent\thesis@abstractCz
+      \par\vfil\null
+    \end{alwayssingle}}
+%    \end{macrocode}
+% \end{macro}
+
+% ************* DECLARATION *******************
+
+% \begin{macro}{\thesis@blocks@declaration}
+% The |\thesis@blocks@declaration| macro typesets the
+% declaration text.
+% \begin{macrocode}
+\def\thesis@blocks@declaration{%
+  \begin{alwayssingle}%
+    % Start the new chapter without clearing the left page.
+    \clearpage
+    \chapter*{\thesis@@{declarationTitle}}%
+    I hereby declare that I have written the submitted {\thesis@@{typeName}} concerning the topic of \textbf{{\thesis@title}} independently. 
+    All the sources used for the purpose of finishing this thesis have been adequately referenced and are listed in the Bibliography.
+    \vskip 2cm% \\
+    \DTMsetdatestyle{en-US}
+    {In \thesis@place \hspace{1pt} \today}
+    \hfill\thesis@author
+  \end{alwayssingle}}
+%    \end{macrocode}
+% \end{macro}
+
+% ************* ACKNOWLEDGEMENTS *******************
+
+% \begin{macro}{\thesis@blocks@thanks}
+% The |\thesis@blocks@thanks| macro typesets the
+% acknowledgements, if the |\thesis@thanks| macro is
+% defined. Otherwise, the macro produces no output.
+% \begin{macrocode}
+\def\thesis@blocks@thanks{%
+  \ifx\thesis@thanks\undefined\else
+    \begin{alwayssingle}%
+      % Start the new chapter without clearing the left page.
+      \clearpage
+      \chapter*{\thesis@@{thanksTitle}}%
+      \leavevmode\thesis@thanks
+    \end{alwayssingle}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+
 % Note that there is no direct support for the seminar paper and
 % thesis proposal types.  If you would like to change the contents
 % of the preamble and the postamble, you should modify the
@@ -58,14 +283,13 @@
 \def\thesis@blocks@preamble{%
   \thesis@blocks@coverMatter
     \thesis@blocks@cover
-    \thesis@blocks@titlePage
   \thesis@blocks@frontMatter
     \thesis@blocks@clearRight
+      \thesis@blocks@bibrecordCz
+      \thesis@blocks@bibrecord
+      \thesis@blocks@abstractCz
       \thesis@blocks@abstract
       \thesis@blocks@abstractEn
-      \thesis@blocks@keywords
-      \thesis@blocks@keywordsEn
-    \thesis@blocks@assignment
     \thesis@blocks@declaration
     \thesis@blocks@thanks
     \thesis@blocks@tables}

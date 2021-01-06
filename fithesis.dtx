@@ -4,6 +4,7 @@
 \documentclass{ltxdoc}
 \usepackage[utf8]{inputenc} % this file uses UTF-8
 \usepackage[english]{babel}
+\usepackage[en-US]{datetime2}
 \usepackage{tgpagella}
 \usepackage{tabularx}
 \usepackage{hologo}
@@ -1207,6 +1208,17 @@
   \long\def\thesis@abstract{#1}}
 %    \end{macrocode}
 % \end{macro}
+% \begin{macro}{\thesis@abstractCz}
+% \subsubsection{The \texttt{abstractCz} key}
+% The \marg{\texttt{abstractCz}=text} pair sets the Czech abstract of the
+% thesis to \textit{text}. The \textit{text} is stored within the
+% |\thesis@abstractCz| macro. Changes by Jakub Vašíček
+%    \begin{macrocode}
+\thesis@def{abstractCz}
+\long\def\KV@thesis@abstractCz#1{%
+  \long\def\thesis@abstractCz{#1}}
+%    \end{macrocode}
+% \end{macro}
 % \begin{macro}{\thesis@abstractEn}
 % \subsubsection{The \texttt{abstractEn} key}
 % The \marg{\texttt{abstractEn}=text} pair sets the English
@@ -1910,6 +1922,8 @@
 %   \item|\thesis@|\textit{locale}|@authorTitle| -- The title of
 %     the author entry
 %   \item|\thesis@|\textit{locale}|@abstractTitle| -- The title of
+%     the abstract section
+%   \item|\thesis@|\textit{locale}|@abstractTitleCz| -- The Czech title of
 %     the abstract section
 %   \item|\thesis@|\textit{locale}|@keywordsTitle| -- The title of
 %     the keywords section

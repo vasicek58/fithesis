@@ -1,2 +1,9 @@
 *.swp
 *.vim
+*.sty
+*.log
+*.def
+*.pdf
+*.clo
+*.cls
+*.sh
